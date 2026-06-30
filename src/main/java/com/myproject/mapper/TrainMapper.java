@@ -17,4 +17,12 @@ public interface TrainMapper {
      */
     @Update("UPDATE train SET stock = stock - 1 WHERE id = #{id} AND stock > 0")
     int decreaseStock(@Param("id") Integer id);
+
+    /**
+     * 增加库存（退票/补加车厢时调用）
+     * id：车次主键
+     * 返回受影响行数，成功返回1，无此车次返回0
+     */
+    @Update("UPDATE train SET stock = stock + 1 WHERE id = #{id}")
+    int increaseStock(@Param("id") Integer id);
 }
