@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -45,13 +46,17 @@ public class TrainController {
     }
 
     /**
-     * 查某个车次的经停站，train_route表无需对应实体类，作为只读表，它只需要可以被访问到数据就可以了（数据可以直接自己捏造，因为也不可能就得到真正的火车实况，本项目是模拟的）
-     * 这个在买票的时候用的到
+     * 查经停站 — 用户选某车次后查看途经站点、到站/离站时间
+     *
+     * 典型调用：GET /api/trains/1/route
+     * 返回: [{stationOrder:1, stationName:"北京南", arrivalTime:"-", departureTime:"06:00", stayMinutes:0}, ...]
      */
-//    @GetMapping("/searchRoute")
-//    public Result searchRoute(@RequestParam ){
-//
-//    }
+    @GetMapping("/{trainId}/route")
+    public Result searchRoute(@PathVariable Long trainId) {
+        log.info("查询经停站: trainId={}", trainId);
+        List<Map<String, Object>> route = trainService.findRoute(trainId);
+        return Result.success(route);
+    }
 
     /**
      * 查可用座位 — 选了某个车次后，查看还有哪些座位可以买

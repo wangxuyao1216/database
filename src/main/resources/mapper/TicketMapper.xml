@@ -24,11 +24,53 @@
             #{ticketPrice,          mode=IN,  jdbcType=DECIMAL},
             #{seatType,             mode=IN,  jdbcType=VARCHAR},
             #{scheduleDate,         mode=IN,  jdbcType=DATE},
-            --传进来的Map在这个调用存储过程的时候被自动插入返回值的键值对了，具体是因为下面三条代码可以自动写回Map
             #{resultCode,           mode=OUT, jdbcType=INTEGER},
             #{resultMsg,            mode=OUT, jdbcType=VARCHAR},
             #{orderId,              mode=OUT, jdbcType=BIGINT}
         )}
     </select>
 
+
+    <select id="findById" resultType="map">
+        SELECT id,
+               user_id         AS userId,
+               ticket_status   AS ticketStatus,
+               ticket_price    AS ticketPrice,
+               schedule_date   AS scheduleDate,
+               train_schedule_id AS trainScheduleId
+        FROM ticket_order WHERE id = #{orderId}
+    </select>
+
+    <!--
+        调用退票存储过程
+        IN:  p_ticket_id, p_refund_reason
+        OUT: p_result_code (0成功), p_result_msg, p_refund_amount
+    -->
+    <select id="cancelTicket" statementType="CALLABLE" parameterType="map">
+        {call sp_refund_ticket(
+            #{p_ticket_id,       mode=IN,  jdbcType=BIGINT},
+            #{p_refund_reason,   mode=IN,  jdbcType=VARCHAR},
+            #{p_result_code,     mode=OUT, jdbcType=INTEGER},
+            #{p_result_msg,      mode=OUT, jdbcType=VARCHAR},
+            #{p_refund_amount,   mode=OUT, jdbcType=DECIMAL}
+        )}
+    </select>
+
+    <!--
+        查询我的订单（分页）
+        IN:  p_user_id, p_page, p_page_size
+        返回: 订单列表（6表JOIN结果）
+    -->
+    <select id="getMyOrders" statementType="CALLABLE" parameterType="map" resultType="map">
+        {call sp_get_user_orders(
+            #{userId,    mode=IN, jdbcType=BIGINT},
+            #{page,      mode=IN, jdbcType=INTEGER},
+            #{size,      mode=IN, jdbcType=INTEGER}
+        )}
+    </select>
+
+    <!--    这里使用了v_order_detail视图进行查询   -->
+    <select id="countMyOrders" resultType="int">
+        SELECT COUNT(*) FROM v_order_detail WHERE user_id = #{userId}
+    </select>
 </mapper>

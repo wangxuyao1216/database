@@ -11,11 +11,8 @@ import com.myproject.service.UserService;
 import com.myproject.util.AESUtil;
 import com.myproject.util.CurreetHolder;
 import com.myproject.util.JwtUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

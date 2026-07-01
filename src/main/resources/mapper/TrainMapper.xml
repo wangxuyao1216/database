@@ -23,4 +23,20 @@
               )}
     </select>
 
+    <!-- 查经停站 — 使用 v_train_schedule_detail 视图 -->
+    <select id="findRouteByTrainId" resultType="map">
+        SELECT station_order   AS stationOrder,
+               station_name    AS stationName,
+               station_code    AS stationCode,
+               city,
+               province,
+               arrival_time    AS arrivalTime,
+               departure_time  AS departureTime,
+               stay_minutes    AS stayMinutes,
+               distance_km     AS distanceKm
+        FROM v_train_schedule_detail
+        WHERE train_id = #{trainId}
+        ORDER BY station_order
+    </select>
+
 </mapper>

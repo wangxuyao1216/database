@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TrainServiceImpl implements TrainService {
@@ -29,5 +30,11 @@ public class TrainServiceImpl implements TrainService {
         if (fromStationId == null) throw new RuntimeException("起点站ID不可以为空");
         if (toStationId == null) throw new RuntimeException("终点站ID不可以为空");
         return trainMapper.findAvailableSeats(scheduleId, fromStationId, toStationId);
+    }
+
+    @Override
+    public List<Map<String, Object>> findRoute(Long trainId) {
+        if (trainId == null) throw new RuntimeException("列车ID不可以为空");
+        return trainMapper.findRouteByTrainId(trainId);
     }
 }

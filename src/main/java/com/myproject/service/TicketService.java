@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public interface TicketService {
 
+    Result cancelOrder(Long orderId);
+
     @Data
     class TicketRequest {
         private Long scheduleId;
@@ -21,4 +23,9 @@ public interface TicketService {
     }
 
     Result buy(TicketRequest req);
+
+    /**
+     * 查询我的订单列表（分页）
+     */
+    Result getMyOrders(Long userId, Integer page, Integer size, Integer status);
 }

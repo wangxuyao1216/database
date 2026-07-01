@@ -19,4 +19,9 @@ public interface TrainMapper {
     List<SeatInfo> findAvailableSeats(@Param("scheduleId") Long scheduleId,
                                        @Param("fromStationId") Long fromStationId,
                                        @Param("toStationId") Long toStationId);
+
+    /**
+     * 查经停站 — 从 v_train_schedule_detail 视图读取
+     */
+    List<java.util.Map<String, Object>> findRouteByTrainId(@Param("trainId") Long trainId);
 }
